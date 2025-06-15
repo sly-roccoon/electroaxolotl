@@ -1,0 +1,40 @@
+[gd_scene load_steps=9 format=3 uid="uid://idx8libsegol"]
+
+[ext_resource type="Script" uid="uid://g676diush8b2" path="res://objects/camera_3d.gd" id="1_eqqp1"]
+[ext_resource type="Script" uid="uid://cs7eo0ma1l8al" path="res://objects/player.gd" id="1_ykyjo"]
+[ext_resource type="Script" uid="uid://dqbqo33f146d6" path="res://objects/tools.gd" id="3_f46kd"]
+[ext_resource type="Script" uid="uid://dx766sl6bby0u" path="res://objects/shooter.gd" id="3_uxov2"]
+[ext_resource type="PackedScene" uid="uid://sigbx2vi63wm" path="res://objects/sound_particle.tscn" id="4_nmc1l"]
+[ext_resource type="Script" uid="uid://bfkqpgyxd7xuq" path="res://objects/collision_placer.gd" id="6_3rerk"]
+[ext_resource type="Script" uid="uid://bx14rv1mlmsrp" path="res://objects/ray_gun.gd" id="6_i825w"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ykyjo"]
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 0
+script = ExtResource("1_ykyjo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ykyjo")
+debug_color = Color(1, 0, 0, 1)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+script = ExtResource("1_eqqp1")
+
+[node name="Tools" type="Node3D" parent="Camera3D"]
+script = ExtResource("3_f46kd")
+
+[node name="SoundShooter" type="Marker3D" parent="Camera3D/Tools"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+script = ExtResource("3_uxov2")
+ProjectileScene = ExtResource("4_nmc1l")
+
+[node name="RayGun" type="RayCast3D" parent="Camera3D/Tools"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2)
+script = ExtResource("6_i825w")
+
+[node name="CollisionPlacer" type="Marker3D" parent="Camera3D/Tools" node_paths=PackedStringArray("player")]
+script = ExtResource("6_3rerk")
+player = NodePath("../../..")
+
+[node name="OSC_Send" type="Node3D" parent="."]

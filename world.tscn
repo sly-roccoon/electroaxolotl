@@ -1,0 +1,188 @@
+[gd_scene load_steps=12 format=3 uid="uid://ce4dsptebsk31"]
+
+[ext_resource type="Material" uid="uid://bmvqim2cummwh" path="res://materials/red.tres" id="1_aqk2v"]
+[ext_resource type="Material" uid="uid://dp2mtv1rmwp8e" path="res://materials/green.tres" id="2_036b0"]
+[ext_resource type="Material" uid="uid://c6t4jrsoau0eh" path="res://materials/blue.tres" id="3_dwbse"]
+[ext_resource type="PackedScene" uid="uid://idx8libsegol" path="res://objects/player.tscn" id="4_pkg7o"]
+
+[sub_resource type="GDScript" id="GDScript_71j4m"]
+script/source = "extends Node
+
+var mouse_free := false
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
+	pass
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(\"pause\"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		mouse_free = true
+	
+	if event.is_action_pressed(\"shoot\"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		mouse_free = false
+		
+"
+
+[sub_resource type="GDScript" id="GDScript_k0juu"]
+script/source = "extends Panel
+
+@onready var coord_label = $Text
+@export var target_node_path : NodePath  # The node whose coordinates you want to display
+
+func _process(_delta):
+	var target = get_node_or_null(target_node_path)
+	if target:
+		# For 3D nodes, use global_transform.origin
+		var pos = target.global_transform.origin
+		var speed = target.shooter.speed
+		var cur_size = target.shooter.size
+		var time = target.shooter.time
+		
+		coord_label.text = \"Position: (%.2f, %.2f, %.2f)\\nSpeed: %.2f\\nSize: %.2f\\nLifetime: %.2f s\" % [pos.x, pos.y, pos.z, speed, cur_size, time]
+	else:
+		coord_label.text = \"Target node not found\"
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqk2v"]
+bg_color = Color(0.750348, 0.567101, 0.171316, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.662745, 0, 0.8, 1)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_e5uuo"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rwgxs"]
+material = ExtResource("1_aqk2v")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4wyf3"]
+material = ExtResource("2_036b0")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_k0juu"]
+material = ExtResource("3_dwbse")
+
+[node name="World" type="Node3D"]
+
+[node name="Controls" type="Node" parent="."]
+script = SubResource("GDScript_71j4m")
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="Info" type="Panel" parent="GUI"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 256.0
+offset_bottom = 112.0
+script = SubResource("GDScript_k0juu")
+target_node_path = NodePath("../../Player")
+
+[node name="Text" type="Label" parent="GUI/Info"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.064
+offset_top = 8.0
+offset_right = -7.936
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tools" type="Panel" parent="GUI"]
+custom_minimum_size = Vector2(512, 64)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -80.0
+offset_right = 256.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_aqk2v")
+
+[node name="Bounds" type="StaticBody3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+collision_layer = 3
+
+[node name="X_pos" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 10, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_e5uuo")
+debug_color = Color(0.984314, 0, 0.360784, 0.705882)
+debug_fill = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bounds/X_pos"]
+transform = Transform3D(-10, 1.74845e-07, 2.62268e-06, -1.74845e-06, -1, -2.23556e-13, 2.62268e-06, -6.82121e-14, 10, 1.90735e-06, 20, 0)
+mesh = SubResource("PlaneMesh_rwgxs")
+skeleton = NodePath("../../Z_neg")
+
+[node name="Y_pos" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("WorldBoundaryShape3D_e5uuo")
+debug_color = Color(0.984314, 0, 0.360784, 0.705882)
+debug_fill = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bounds/Y_pos"]
+transform = Transform3D(10, -2.62268e-07, -2.62268e-06, 2.62268e-06, 1, -5.7259e-15, 2.62268e-06, -6.82121e-14, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_4wyf3")
+skeleton = NodePath("../../Z_neg")
+
+[node name="Z_pos" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(-1, 2.62268e-07, 0, 1.14641e-14, 4.37114e-08, -1, -2.62268e-07, -1, -4.37114e-08, -9.53674e-07, 0, 10)
+shape = SubResource("WorldBoundaryShape3D_e5uuo")
+debug_color = Color(0.984314, 0, 0.360784, 0.705882)
+debug_fill = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bounds/Z_pos"]
+transform = Transform3D(10, -2.62268e-07, -2.62268e-06, 2.62268e-06, 1, 0, 2.62268e-06, -6.75016e-14, 10, -0.0666504, 9.53674e-07, 0)
+mesh = SubResource("PlaneMesh_k0juu")
+
+[node name="X_neg" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1.31134e-07, 1, 0, -1, 1.31134e-07, 0, 0, 0, 1, -10, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_e5uuo")
+debug_color = Color(0.984314, 0, 0.360784, 0.705882)
+debug_fill = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bounds/X_neg"]
+transform = Transform3D(-10, 1.74845e-07, 2.62268e-06, -1.74845e-06, -1, -2.23556e-13, 2.62268e-06, -6.82121e-14, 10, 1.90735e-06, 20, 0)
+mesh = SubResource("PlaneMesh_rwgxs")
+skeleton = NodePath("../../Z_neg")
+
+[node name="Y_neg" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
+shape = SubResource("WorldBoundaryShape3D_e5uuo")
+debug_color = Color(0.984314, 0, 0.360784, 0.705882)
+debug_fill = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bounds/Y_neg"]
+transform = Transform3D(10, -2.62268e-07, -2.62268e-06, 2.62268e-06, 1, -5.7259e-15, 2.62268e-06, -6.82121e-14, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_4wyf3")
+skeleton = NodePath("../../Z_neg")
+
+[node name="Z_neg" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, -2.62268e-07, -2.62268e-07, -2.62268e-07, -4.37113e-08, -1, 2.62268e-07, 1, -4.37114e-08, 2.62268e-06, 0, -10)
+shape = SubResource("WorldBoundaryShape3D_e5uuo")
+debug_color = Color(0.984314, 0, 0.360784, 0.705882)
+debug_fill = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bounds/Z_neg"]
+transform = Transform3D(10, -2.62268e-07, -2.62268e-06, 2.62268e-06, 1, -5.7259e-15, 2.62268e-06, -6.82121e-14, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_k0juu")
+
+[node name="Player" parent="." instance=ExtResource("4_pkg7o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.6327, 0)

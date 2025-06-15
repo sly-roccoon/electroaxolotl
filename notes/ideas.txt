@@ -1,0 +1,17 @@
+- shoot connected lines, with passthrough but collision detection
+- different sound generators to choose from, continouous, collision
+- 'charge' size by holding down
+- parameters x,y,z, collision object type, speed, size
+- plane placement with collision for bounces
+- mic sound input for colliders
+- multiplayer?!
+- ambisonics!
+
+TOOLS:
+	- object collision particles
+	- continuous particles
+	- polygon creation with collision (three points from player position)
+	- raycasting shoot two connection points and have line spun between
+	- keypad/number row determines synthesiser type (waveform, and generation)
+	- right click to remove
+	- chargable!!! SPACE bar to speak

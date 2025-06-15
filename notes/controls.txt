@@ -1,0 +1,7 @@
+wasd + mouse = movement
+shift + wasd = fast movement
+lmb = fire sound particle
+scroll = speed
+ctrl + scroll = size
+shift + scroll = lifetime
+alt + lmb = random values for all three parameters
