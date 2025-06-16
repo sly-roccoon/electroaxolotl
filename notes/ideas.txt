@@ -14,4 +14,4 @@ TOOLS:
 	- raycasting shoot two connection points and have line spun between
 	- keypad/number row determines synthesiser type (waveform, and generation)
 	- right click to remove
-	- chargable!!! SPACE bar to speak
+	- chargable!!! right click to speak

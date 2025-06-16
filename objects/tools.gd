@@ -2,13 +2,12 @@ extends Node3D
 
 @onready var shooter := $SoundShooter
 @onready var placer := $CollisionPlacer
-@onready var raygun := $RayGun
+@onready var remover := $Remover
 
 enum Tools {
 	PARTICLE_COLLISION,
 	PARTICLE_CONTINUOUS,
 	POLYGON,
-	RAY,
 	REMOVE
 }
 
@@ -29,18 +28,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("tool_particle_continuous"):
 		cur_tool = Tools.PARTICLE_CONTINUOUS
 	elif event.is_action_pressed("tool_polygon"):
+		placer.resetPoints()
 		cur_tool = Tools.POLYGON
-	elif event.is_action_pressed("tool_ray"):
-		cur_tool = Tools.RAY
 	elif event.is_action_pressed("tool_remove"):
 		cur_tool = Tools.REMOVE
 	
 	if cur_tool == Tools.PARTICLE_COLLISION || cur_tool == Tools.PARTICLE_CONTINUOUS:
 		shooter.handleInput(event, cur_tool)
 	elif cur_tool == Tools.POLYGON:
-		placer.resetPoints()
 		placer.handleInput(event)
-	elif cur_tool == Tools.RAY:
-		pass
 	elif cur_tool == Tools.REMOVE:
-		pass
+		remover.handleInput(event)

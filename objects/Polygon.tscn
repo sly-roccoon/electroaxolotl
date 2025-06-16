@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://oilg45ynwmw8"]
+
+[ext_resource type="Script" uid="uid://dlsringh3rqf8" path="res://objects/polygon.gd" id="1_tl8oo"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_0oy3g"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0oy3g"]
+
+[node name="Polygon" type="StaticBody3D"]
+collision_layer = 14
+collision_mask = 8
+script = ExtResource("1_tl8oo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_0oy3g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_0oy3g")
+skeleton = NodePath("../CollisionShape3D")

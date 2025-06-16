@@ -178,6 +178,6 @@ func parse_bundle(packet: PackedByteArray):
 					vals.append(args)
 				
 				
-		print(address, " ", vals)
+		#print(address, " ", vals)
 		incoming_messages[address] = vals
 		message_received.emit(address, vals, Time.get_time_string_from_system())

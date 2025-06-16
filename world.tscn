@@ -1,9 +1,18 @@
-[gd_scene load_steps=12 format=3 uid="uid://ce4dsptebsk31"]
+[gd_scene load_steps=22 format=3 uid="uid://ce4dsptebsk31"]
 
 [ext_resource type="Material" uid="uid://bmvqim2cummwh" path="res://materials/red.tres" id="1_aqk2v"]
+[ext_resource type="Texture2D" uid="uid://dq13r80rgb8no" path="res://icons/collision_particle.svg" id="1_gbfbk"]
+[ext_resource type="Script" uid="uid://dwffvhdgecq4i" path="res://objects/tools_gui.gd" id="1_ioo17"]
+[ext_resource type="FontFile" uid="uid://c1yvfdqq10jta" path="res://fonts/Sono-Regular.ttf" id="1_wse8f"]
 [ext_resource type="Material" uid="uid://dp2mtv1rmwp8e" path="res://materials/green.tres" id="2_036b0"]
+[ext_resource type="Texture2D" uid="uid://dufv2kpvaswog" path="res://icons/continuous_particle.svg" id="2_ioo17"]
 [ext_resource type="Material" uid="uid://c6t4jrsoau0eh" path="res://materials/blue.tres" id="3_dwbse"]
+[ext_resource type="Texture2D" uid="uid://w1lmby4d4ehd" path="res://icons/remover.svg" id="3_wse8f"]
+[ext_resource type="Texture2D" uid="uid://dxq34xe4k4me0" path="res://icons/polygon.svg" id="4_ic0uy"]
 [ext_resource type="PackedScene" uid="uid://idx8libsegol" path="res://objects/player.tscn" id="4_pkg7o"]
+[ext_resource type="Script" uid="uid://drure87mo1kew" path="res://addons/godOSC/scripts/OSCClient.gd" id="5_036b0"]
+[ext_resource type="Script" uid="uid://d055860qmsly0" path="res://playerOSC.gd" id="11_2o6r5"]
+[ext_resource type="Script" uid="uid://dbsjvxkpamd5s" path="res://particlesOSC.gd" id="12_2o6r5"]
 
 [sub_resource type="GDScript" id="GDScript_71j4m"]
 script/source = "extends Node
@@ -50,18 +59,21 @@ func _process(_delta):
 		coord_label.text = \"Target node not found\"
 "
 
+[sub_resource type="Theme" id="Theme_ic0uy"]
+default_font = ExtResource("1_wse8f")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqk2v"]
 bg_color = Color(0.750348, 0.567101, 0.171316, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
 border_color = Color(0.662745, 0, 0.8, 1)
-border_blend = true
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 5
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_e5uuo"]
 
@@ -84,7 +96,7 @@ script = SubResource("GDScript_71j4m")
 [node name="Info" type="Panel" parent="GUI"]
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 256.0
+offset_right = 376.0
 offset_bottom = 112.0
 script = SubResource("GDScript_k0juu")
 target_node_path = NodePath("../../Player")
@@ -100,25 +112,49 @@ offset_right = -7.936
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_ic0uy")
 
-[node name="Tools" type="Panel" parent="GUI"]
-custom_minimum_size = Vector2(512, 64)
+[node name="Tools" type="Panel" parent="GUI" node_paths=PackedStringArray("player")]
+custom_minimum_size = Vector2(128, 64)
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -256.0
-offset_top = -80.0
-offset_right = 256.0
-offset_bottom = -16.0
+offset_left = -200.0
+offset_top = -120.0
+offset_right = 200.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_aqk2v")
+script = ExtResource("1_ioo17")
+player = NodePath("../../Player")
+
+[node name="CollisionParticle" type="Sprite2D" parent="GUI/Tools"]
+position = Vector2(57, 50)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_gbfbk")
+
+[node name="ContinuousParticle" type="Sprite2D" parent="GUI/Tools"]
+position = Vector2(153, 50)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_ioo17")
+
+[node name="Remover" type="Sprite2D" parent="GUI/Tools"]
+position = Vector2(345, 50)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_wse8f")
+
+[node name="Polygon" type="Sprite2D" parent="GUI/Tools"]
+position = Vector2(249, 50)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("4_ic0uy")
 
 [node name="Bounds" type="StaticBody3D" parent="."]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
-collision_layer = 3
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+collision_layer = 11
+collision_mask = 9
 
 [node name="X_pos" type="CollisionShape3D" parent="Bounds"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 10, 0, 0)
@@ -186,3 +222,18 @@ mesh = SubResource("PlaneMesh_k0juu")
 
 [node name="Player" parent="." instance=ExtResource("4_pkg7o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.6327, 0)
+
+[node name="PlayerOSC" type="Node" parent="Player" node_paths=PackedStringArray("target_client")]
+script = ExtResource("11_2o6r5")
+target_client = NodePath("../../OSCClient")
+osc_address = "/player"
+send_message_on = 1
+
+[node name="Polygons" type="Node3D" parent="."]
+
+[node name="Particles" type="Node3D" parent="." node_paths=PackedStringArray("target_client")]
+script = ExtResource("12_2o6r5")
+target_client = NodePath("../OSCClient")
+
+[node name="OSCClient" type="Node" parent="."]
+script = ExtResource("5_036b0")

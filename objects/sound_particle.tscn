@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://sigbx2vi63wm"]
+[gd_scene load_steps=7 format=3 uid="uid://sigbx2vi63wm"]
 
 [ext_resource type="Script" uid="uid://rap3l2q2e6fw" path="res://objects/sound_particle.gd" id="1_tfr1b"]
 
@@ -18,9 +18,40 @@ flip_faces = true
 radial_segments = 16
 rings = 6
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tfr1b"]
+transparency = 3
+alpha_hash_scale = 1.0
+alpha_antialiasing_mode = 0
+emission_enabled = true
+emission = Color(0.973535, 0.973535, 0.973535, 1)
+
+[sub_resource type="GDScript" id="GDScript_tfr1b"]
+script/source = "extends CSGTorus3D
+
+var prev_speed : float = 0.0
+
+var axis : Vector3 = Vector3.ZERO
+const speed_factor : float = 2*10e-4
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
+	var speed = get_parent().linear_velocity.length()
+	scale = get_node(\"../CollisionShape3D\").scale
+	
+	if abs(speed - prev_speed) > 2:
+		axis = Vector3(randf(), randf(), 0).normalized()
+		prev_speed = speed
+	
+	rotate(axis, speed * speed_factor)
+"
+
 [node name="SoundParticle" type="RigidBody3D"]
-collision_layer = 2
-collision_mask = 3
+collision_layer = 10
+collision_mask = 11
 gravity_scale = 0.0
 script = ExtResource("1_tfr1b")
 
@@ -36,3 +67,14 @@ light_energy = 5.0
 light_size = 1.0
 omni_range = 1.0
 omni_attenuation = 1.5
+
+[node name="OSCMessage" type="Node" parent="."]
+
+[node name="Torus" type="CSGTorus3D" parent="."]
+inner_radius = 0.823
+outer_radius = 0.688
+sides = 12
+material = SubResource("StandardMaterial3D_tfr1b")
+script = SubResource("GDScript_tfr1b")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

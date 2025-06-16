@@ -11,7 +11,7 @@ enum Tools {
 }
 
 var speed := 20.0
-const scaling_factor := 1.5
+const scaling_factor := 1.1
 const min_speed := 1.0
 const max_speed := 50.0
 
@@ -22,6 +22,8 @@ const max_size := 5.0
 var time := 60.0
 const min_time := 1.0
 const max_time := 300.0
+
+var is_continuous : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -35,6 +37,11 @@ func _process(_delta: float) -> void:
 func handleInput(event: InputEvent, type: Tools = Tools.PARTICLE_COLLISION) -> void:
 	var ctrl_held := Input.is_key_pressed(KEY_CTRL)
 	var shift_held := Input.is_key_pressed(KEY_SHIFT)
+	
+	if type == Tools.PARTICLE_CONTINUOUS:
+		is_continuous = true
+	else:
+		is_continuous = false
 	
 	if event.is_action_pressed("incr"):
 		if ctrl_held:
@@ -60,9 +67,11 @@ func handleInput(event: InputEvent, type: Tools = Tools.PARTICLE_COLLISION) -> v
 		
 func shoot_projectile() -> void:
 	var projectile := ProjectileScene.instantiate()
-	get_tree().current_scene.add_child(projectile)
+	var particles_group = get_tree().current_scene.find_child("Particles")
+	particles_group.add_child(projectile)
+	projectile.body_entered.connect(particles_group._on_particle_collision.bind(projectile))
 	projectile.position = global_position
 	if Input.is_key_pressed(KEY_ALT):
-		projectile.shoot(-global_transform.basis.z, randf_range(min_speed, max_speed), randf_range(min_size, max_size), randf_range(min_time, max_time))
+		projectile.shoot(-global_transform.basis.z, randf_range(min_speed, max_speed), randf_range(min_size, max_size), randf_range(min_time, max_time), is_continuous)
 	else:
-		projectile.shoot(-global_transform.basis.z, speed, size, time)
+		projectile.shoot(-global_transform.basis.z, speed, size, time, is_continuous)

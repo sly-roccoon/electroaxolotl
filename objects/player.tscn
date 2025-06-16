@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://idx8libsegol"]
+[gd_scene load_steps=11 format=3 uid="uid://idx8libsegol"]
 
 [ext_resource type="Script" uid="uid://g676diush8b2" path="res://objects/camera_3d.gd" id="1_eqqp1"]
 [ext_resource type="Script" uid="uid://cs7eo0ma1l8al" path="res://objects/player.gd" id="1_ykyjo"]
@@ -6,9 +6,13 @@
 [ext_resource type="Script" uid="uid://dx766sl6bby0u" path="res://objects/shooter.gd" id="3_uxov2"]
 [ext_resource type="PackedScene" uid="uid://sigbx2vi63wm" path="res://objects/sound_particle.tscn" id="4_nmc1l"]
 [ext_resource type="Script" uid="uid://bfkqpgyxd7xuq" path="res://objects/collision_placer.gd" id="6_3rerk"]
-[ext_resource type="Script" uid="uid://bx14rv1mlmsrp" path="res://objects/ray_gun.gd" id="6_i825w"]
+[ext_resource type="PackedScene" uid="uid://oilg45ynwmw8" path="res://objects/Polygon.tscn" id="8_3rfka"]
+[ext_resource type="Script" uid="uid://bnivr3mqnall3" path="res://objects/remover.gd" id="9_4vq5b"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ykyjo"]
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_i8sra"]
+length = 10.0
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 0
@@ -29,12 +33,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 script = ExtResource("3_uxov2")
 ProjectileScene = ExtResource("4_nmc1l")
 
-[node name="RayGun" type="RayCast3D" parent="Camera3D/Tools"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2)
-script = ExtResource("6_i825w")
-
 [node name="CollisionPlacer" type="Marker3D" parent="Camera3D/Tools" node_paths=PackedStringArray("player")]
 script = ExtResource("6_3rerk")
 player = NodePath("../../..")
+polygon_scene = ExtResource("8_3rfka")
 
-[node name="OSC_Send" type="Node3D" parent="."]
+[node name="Remover" type="Area3D" parent="Camera3D/Tools"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("9_4vq5b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera3D/Tools/Remover"]
+shape = SubResource("SeparationRayShape3D_i8sra")
