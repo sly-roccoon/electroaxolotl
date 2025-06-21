@@ -28,4 +28,3 @@ func handleInput(event : InputEvent) -> void:
 		points.append(player.global_position)
 	if event.is_action_pressed("shoot_alt"):
 		createShape()
-	pass

@@ -115,10 +115,9 @@ func _custom_message_handling():
 
 ## Overwrite this method with your custom message contents. This method must return a value
 func _custom_message_contents() -> Variant:
-	var value = 0
-	
-	return value
-	pass
+	var pitch = parent.get_node("Camera3D").global_rotation.x
+	var msg = [parent.global_position.x, parent.global_position.y, parent.global_position.z, pitch, parent.global_rotation.y]
+	return msg
 
 func using_timer():
 	send_message(current_value)

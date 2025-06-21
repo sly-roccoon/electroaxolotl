@@ -15,6 +15,10 @@ run/main_scene="uid://ce4dsptebsk31"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[audio]
+
+driver/driver="Dummy"
+
 [debug_draw_3d]
 
 settings/addon_root_folder="res://addons/debug_draw_3d"
@@ -106,6 +110,11 @@ shoot_alt={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":2,"position":Vector2(241, 6),"global_position":Vector2(250, 54),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
+reset={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194308,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
 
 [layer_names]
 
@@ -113,3 +122,14 @@ shoot_alt={
 3d_physics/layer_2="Particle Collision"
 3d_physics/layer_3="Polygons"
 3d_physics/layer_4="Walls"
+
+[physics]
+
+3d/run_on_separate_thread=true
+3d/default_gravity=0.0
+3d/default_gravity_vector=Vector3(0, 0, 0)
+3d/default_linear_damp=0.0
+3d/default_angular_damp=0.0
+3d/sleep_threshold_linear=0.0
+3d/sleep_threshold_angular=0.0
+3d/time_before_sleep=0.0

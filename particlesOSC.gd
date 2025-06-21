@@ -29,7 +29,10 @@ func sendContinuous() -> void:
 		target_client.send_message("/continuous", particle.getData())
 	
 func _on_particle_collision(body, particle):
-	print("yes")
-	if particle.continuous == true: pass
-	pass
+	if particle.continuous == true: return
 	
+	target_client.send_message("/collision", particle.getData())
+
+func _on_particle_exiting(particle):
+	if particle.continuous:
+		target_client.send_message("/rm_continuous", [particle.get_instance_id()])

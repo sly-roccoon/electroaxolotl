@@ -6,8 +6,8 @@
 [ext_resource type="Script" uid="uid://dx766sl6bby0u" path="res://objects/shooter.gd" id="3_uxov2"]
 [ext_resource type="PackedScene" uid="uid://sigbx2vi63wm" path="res://objects/sound_particle.tscn" id="4_nmc1l"]
 [ext_resource type="Script" uid="uid://bfkqpgyxd7xuq" path="res://objects/collision_placer.gd" id="6_3rerk"]
-[ext_resource type="PackedScene" uid="uid://oilg45ynwmw8" path="res://objects/Polygon.tscn" id="8_3rfka"]
-[ext_resource type="Script" uid="uid://bnivr3mqnall3" path="res://objects/remover.gd" id="9_4vq5b"]
+[ext_resource type="PackedScene" path="res://objects/Polygon.tscn" id="7_3rfka"]
+[ext_resource type="Script" path="res://objects/remover.gd" id="9_4vq5b"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ykyjo"]
 
@@ -36,7 +36,7 @@ ProjectileScene = ExtResource("4_nmc1l")
 [node name="CollisionPlacer" type="Marker3D" parent="Camera3D/Tools" node_paths=PackedStringArray("player")]
 script = ExtResource("6_3rerk")
 player = NodePath("../../..")
-polygon_scene = ExtResource("8_3rfka")
+polygon_scene = ExtResource("7_3rfka")
 
 [node name="Remover" type="Area3D" parent="Camera3D/Tools"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)

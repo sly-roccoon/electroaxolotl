@@ -15,9 +15,9 @@ const scaling_factor := 1.1
 const min_speed := 1.0
 const max_speed := 50.0
 
-var size := 1.0
+var size := 5.0
 const min_size := 0.1
-const max_size := 5.0
+const max_size := 20.0
 
 var time := 60.0
 const min_time := 1.0
@@ -69,7 +69,8 @@ func shoot_projectile() -> void:
 	var projectile := ProjectileScene.instantiate()
 	var particles_group = get_tree().current_scene.find_child("Particles")
 	particles_group.add_child(projectile)
-	projectile.body_entered.connect(particles_group._on_particle_collision.bind(projectile))
+	projectile.tree_exiting.connect(particles_group._on_particle_exiting.bind(projectile))
+	projectile.get_node("CollisionChecker").body_entered.connect(particles_group._on_particle_collision.bind(projectile))
 	projectile.position = global_position
 	if Input.is_key_pressed(KEY_ALT):
 		projectile.shoot(-global_transform.basis.z, randf_range(min_speed, max_speed), randf_range(min_size, max_size), randf_range(min_time, max_time), is_continuous)

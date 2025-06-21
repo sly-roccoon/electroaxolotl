@@ -27,7 +27,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta : float) -> void:
-	if tools.cur_tool == prev_tool: pass
+	if tools.cur_tool == prev_tool: return
 	
 	for icon in get_children():
 		icon.scale = regular_scale

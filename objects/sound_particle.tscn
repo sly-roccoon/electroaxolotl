@@ -1,6 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://sigbx2vi63wm"]
+[gd_scene load_steps=9 format=3 uid="uid://sigbx2vi63wm"]
 
 [ext_resource type="Script" uid="uid://rap3l2q2e6fw" path="res://objects/sound_particle.gd" id="1_tfr1b"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tfr1b"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_tfr1b"]
+margin = 0.1
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_wt1xw"]
 
@@ -52,8 +59,22 @@ func _process(_delta: float) -> void:
 [node name="SoundParticle" type="RigidBody3D"]
 collision_layer = 10
 collision_mask = 11
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+physics_material_override = SubResource("PhysicsMaterial_tfr1b")
 gravity_scale = 0.0
+can_sleep = false
+linear_damp_mode = 1
+angular_damp_mode = 1
 script = ExtResource("1_tfr1b")
+
+[node name="CollisionChecker" type="Area3D" parent="."]
+collision_layer = 9
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionChecker"]
+shape = SubResource("SphereShape3D_tfr1b")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_wt1xw")
@@ -76,5 +97,3 @@ outer_radius = 0.688
 sides = 12
 material = SubResource("StandardMaterial3D_tfr1b")
 script = SubResource("GDScript_tfr1b")
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]

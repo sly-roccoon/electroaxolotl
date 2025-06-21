@@ -14,6 +14,7 @@ var client = PacketPeerUDP.new()
 
 func _ready():
 	connect_socket(ip_address, port)
+	send_message("/clear", [])
 	print(client.is_socket_connected())
 
 ## Connect to an OSC server. Can only send to one OSC server at a time.
@@ -91,3 +92,9 @@ func send_message(osc_address : String, args : Array):
 	if client.is_socket_connected():
 		var packet = prepare_message(osc_address, args)
 		client.put_packet(packet)
+		
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		print("Quitting! Performing cleanup...")
+		send_message("/clear", [])
+		get_tree().quit() # This will quit the app after your code runs
