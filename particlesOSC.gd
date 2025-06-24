@@ -30,6 +30,9 @@ func sendContinuous() -> void:
 	
 func _on_particle_collision(body, particle):
 	if particle.continuous == true: return
+	if particle.just_spawned:
+		particle.just_spawned = false
+		return
 	
 	target_client.send_message("/collision", particle.getData())
 

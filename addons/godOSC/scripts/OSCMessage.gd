@@ -122,3 +122,29 @@ func _custom_message_contents() -> Variant:
 
 func using_timer():
 	send_message(current_value)
+
+
+func sendContinuous() -> void:
+	# sends continuous particle osc messages
+	var particles : Array = get_children()
+	particles = particles.filter(func(node):
+		if node is SoundParticle:
+			return node.continuous == true
+		return false
+	)
+	
+	for particle in particles:
+		target_client.send_message("/continuous", particle.getData())
+	
+var just_spawned := true
+	
+func _on_particle_collision(body, particle):
+	if particle.continuous == true: return
+	print(body.name)
+	if body.name == "SoundParticle": return
+	
+	target_client.send_message("/collision", particle.getData())
+
+func _on_particle_exiting(particle):
+	if particle.continuous:
+		target_client.send_message("/rm_continuous", [particle.get_instance_id()])

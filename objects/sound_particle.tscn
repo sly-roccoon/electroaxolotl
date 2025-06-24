@@ -58,7 +58,7 @@ func _process(_delta: float) -> void:
 
 [node name="SoundParticle" type="RigidBody3D"]
 collision_layer = 10
-collision_mask = 11
+collision_mask = 10
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
@@ -70,8 +70,8 @@ angular_damp_mode = 1
 script = ExtResource("1_tfr1b")
 
 [node name="CollisionChecker" type="Area3D" parent="."]
-collision_layer = 9
-collision_mask = 9
+collision_layer = 0
+collision_mask = 10
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionChecker"]
 shape = SubResource("SphereShape3D_tfr1b")

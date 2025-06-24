@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://ce4dsptebsk31"]
+[gd_scene load_steps=21 format=3 uid="uid://ce4dsptebsk31"]
 
 [ext_resource type="Material" uid="uid://bmvqim2cummwh" path="res://materials/red.tres" id="1_aqk2v"]
 [ext_resource type="Texture2D" uid="uid://dq13r80rgb8no" path="res://icons/collision_particle.svg" id="1_gbfbk"]
@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://idx8libsegol" path="res://objects/player.tscn" id="4_pkg7o"]
 [ext_resource type="Script" uid="uid://drure87mo1kew" path="res://addons/godOSC/scripts/OSCClient.gd" id="5_036b0"]
 [ext_resource type="Shape3D" uid="uid://cn3trsatrrbyb" path="res://objects/wall.tres" id="7_70uel"]
-[ext_resource type="Script" uid="uid://d055860qmsly0" path="res://playerOSC.gd" id="11_2o6r5"]
 [ext_resource type="Script" uid="uid://dbsjvxkpamd5s" path="res://particlesOSC.gd" id="12_2o6r5"]
 
 [sub_resource type="GDScript" id="GDScript_71j4m"]
@@ -227,13 +226,6 @@ mesh = SubResource("PlaneMesh_k0juu")
 
 [node name="Player" parent="." instance=ExtResource("4_pkg7o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.6327, 0)
-
-[node name="PlayerOSC" type="Node" parent="Player" node_paths=PackedStringArray("target_client")]
-script = ExtResource("11_2o6r5")
-target_client = NodePath("../../OSCClient")
-osc_address = "/player"
-message_contents = 3
-send_message_on = 1
 
 [node name="Polygons" type="Node3D" parent="."]
 

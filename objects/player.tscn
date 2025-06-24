@@ -23,6 +23,7 @@ shape = SubResource("SphereShape3D_ykyjo")
 debug_color = Color(1, 0, 0, 1)
 
 [node name="Camera3D" type="Camera3D" parent="."]
+fov = 100.0
 script = ExtResource("1_eqqp1")
 
 [node name="Tools" type="Node3D" parent="Camera3D"]

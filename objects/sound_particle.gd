@@ -7,6 +7,11 @@ class_name SoundParticle
 
 @onready var collision_sender := $CollisionChecker/CollisionShape3D
 
+var player : CharacterBody3D
+var camera : Camera3D
+
+var just_spawned: bool = true
+
 @onready var torus : CSGTorus3D = $Torus
 
 var should_fizzle : bool
@@ -15,29 +20,27 @@ var timer : Timer
 var continuous : bool = false
 
 func getData() -> Array:
-	var x = global_position.x
-	var y = global_position.y
-	var z = global_position.z
+	var cam_pos = camera.global_position
 	
+	# var azim = camera.global_rotation.y
+	# var elev = camera.global_rotation.x
+	
+	var dist = cam_pos.distance_to(global_position)
+	var dir = (global_position - cam_pos).normalized()
+	
+	var local_dir = camera.global_transform.basis.inverse() * dir
+
+	var azim = atan2(-local_dir.x, -local_dir.z)
+	var elev = asin(local_dir.y)
+
 	var size : float = collisionshape.scale.x
 	var cur_speed : float = linear_velocity.length()
-	return [get_instance_id(), x, y, z, size, cur_speed]
+	return [get_instance_id(), azim, elev, dist, size, cur_speed]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#var phys_mat = PhysicsMaterial.new()
-	#phys_mat.bounce = 1.0
-	#physics_material_override = phys_mat
-	#
-	#linear_damp_mode = RigidBody3D.DAMP_MODE_REPLACE
-	#linear_damp = 0.0
-	#angular_damp_mode = RigidBody3D.DAMP_MODE_REPLACE
-	#angular_damp = 0.0
-	#physics_material_override = phys_mat
-#
-	#axis_lock_angular_x = true
-	#axis_lock_angular_y = true
-	#axis_lock_angular_z = true
+	player = get_tree().current_scene.get_node("Player")
+	camera = player.get_node("Camera3D")
 	
 	timer = Timer.new()
 	timer.one_shot = true
