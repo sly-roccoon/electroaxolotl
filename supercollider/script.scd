@@ -1,23 +1,28 @@
-ServerOptions.outDevices;
+// ServerOptions.outDevices;
+Server.killAll;
+s.options.numOutputBusChannels = 16;
+Server.default.options.outDevice = "ASIO : ReaRoute ASIO (x64)";
+s.boot;
+
 (
 s.quit;
 s.options.numOutputBusChannels = 16;
 Server.default.options.outDevice = "ASIO : ReaRoute ASIO (x64)";
 s.boot;
-NetAddr.langPort;
-)
-NetAddr.langPort;
-Quarks.install("https://github.com/ambisonictoolkit/atk-sc3.git");
-// Quarks.install("https://github.com/madskjeldgaard/binauraldecoders");
-// Quarks.install("ReaCollider");
+NetAddr.langPort.postln;
 
-
-Server.default.options.outDevice = "ASIO : ReaRoute ASIO (x64)";
-
-// ATK.load;
+if(
+    Quarks.installed.collect(_.name).includes("atk-sc3").not,  // not installed
+    {
+        // Install ATK Quark
+        Quarks.install("https://github.com/ambisonictoolkit/atk-sc3.git");
+        "ATK Quark installed. Please recompile the class library and rerun this code.".postln;
+    }
+);
 
 // BinauralDecoderCIPIC.new(hoaOrder:3);
-s.freeAll;
+// s.freeAll;
+)
 (
 ~continuous = ();
 ~maxAmp = 1;
@@ -69,6 +74,7 @@ SynthDef(\collisionParticle, { |freq=440, harm=1, amp=0.5, azim=0, elev=0|
 }).add;
 )
 
+
 // OSC responder for continuous particles
 (
 OSCdef(\continuous, {
@@ -82,7 +88,11 @@ OSCdef(\continuous, {
     harm = size.linexp(0.1, 20, 10, 0.5);
 
 	amp = ~maxAmp / max(1, dist/10.0);
-	amp = amp / 4.0;
+	amp = amp / 2.0;
+
+	azim = Lag.kr(azim, 0.5);
+	elev = Lag.kr(elev, 0.5);
+	amp = Lag.kr(amp, 0.5);
 
 	if(~continuous[id].notNil) {
         ~continuous[id].set(\freq, freq, \amp, amp, \azim, azim, \elev, elev);
@@ -98,7 +108,7 @@ OSCdef(\continuousRemoved, {
     var id = msg[1];
 	~continuous[id].set(\gate, 0);
 	~continuous.removeAt(id);
-}, '/rm_continuous')
+	}, '/rm_continuous');
 )
 
 // OSC responder for collision2 particles
@@ -109,6 +119,7 @@ OSCdef(\collision, {
 	var freq, harm, amp;
 
 	#id, azim, elev, dist, size, speed = msg[1..6];
+
 
 	freq = speed.linexp(1, 50, 100, 2000);
     harm = size.linexp(0.1, 20, 10, 0.5);
