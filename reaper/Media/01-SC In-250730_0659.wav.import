@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dtn081ri4cbrw"
+path="res://.godot/imported/01-SC In-250730_0659.wav-af6511dd949736882ec26fb04a4b565f.sample"
+
+[deps]
+
+source_file="res://reaper/Media/01-SC In-250730_0659.wav"
+dest_files=["res://.godot/imported/01-SC In-250730_0659.wav-af6511dd949736882ec26fb04a4b565f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

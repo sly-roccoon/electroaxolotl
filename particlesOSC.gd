@@ -5,15 +5,13 @@ extends Node
 
 ## The client to send the OSC message with
 @export var target_client : OSCClient
-
 @export var enabled := true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _physics_process(_delta: float) -> void:
 	sendContinuous()
 	
 func sendContinuous() -> void:
@@ -39,3 +37,4 @@ func _on_particle_collision(body, particle):
 func _on_particle_exiting(particle):
 	if particle.continuous:
 		target_client.send_message("/rm_continuous", [particle.get_instance_id()])
+		

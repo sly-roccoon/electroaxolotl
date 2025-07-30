@@ -6,8 +6,8 @@
 [ext_resource type="Script" uid="uid://dx766sl6bby0u" path="res://objects/shooter.gd" id="3_uxov2"]
 [ext_resource type="PackedScene" uid="uid://sigbx2vi63wm" path="res://objects/sound_particle.tscn" id="4_nmc1l"]
 [ext_resource type="Script" uid="uid://bfkqpgyxd7xuq" path="res://objects/collision_placer.gd" id="6_3rerk"]
-[ext_resource type="PackedScene" path="res://objects/Polygon.tscn" id="7_3rfka"]
-[ext_resource type="Script" path="res://objects/remover.gd" id="9_4vq5b"]
+[ext_resource type="PackedScene" uid="uid://oilg45ynwmw8" path="res://objects/Polygon.tscn" id="7_3rfka"]
+[ext_resource type="Script" uid="uid://bnivr3mqnall3" path="res://objects/remover.gd" id="9_4vq5b"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ykyjo"]
 

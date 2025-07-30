@@ -1,12 +1,16 @@
+Platform.userAppSupportDir;
 // ServerOptions.outDevices;
 Server.killAll;
+s.latency = 0.5;
 s.options.numOutputBusChannels = 16;
 Server.default.options.outDevice = "ASIO : ReaRoute ASIO (x64)";
 s.boot;
 
 (
+Server.supernova;
 s.quit;
 s.options.numOutputBusChannels = 16;
+s.latency = 0.5;
 Server.default.options.outDevice = "ASIO : ReaRoute ASIO (x64)";
 s.boot;
 NetAddr.langPort.postln;
@@ -24,29 +28,29 @@ if(
 // s.freeAll;
 )
 (
+~continuous.do { |synth| synth.free };
 ~continuous = ();
 ~maxAmp = 1;
 )
 
 (
 // Synth definition for continuous particles
-SynthDef(\continuousParticle, { |id, freq=440, harm=1, amp=0.1, gate=1, azim=0, elev=0|
+SynthDef(\continuousParticle, {
+	arg id, freq=440, harm=1, amp=0.1, gate=1, azim=0, elev=0;
     var sig, env, hoa;
 	env = EnvGen.kr(Env.asr(0.01, 1, 0.5), gate, doneAction:2);
     sig = 0;
-
-	azim = Lag.kr(azim, 0.5);
-	elev = Lag.kr(elev, 0.5);
-	amp = Lag.kr(amp, 0.5);
 
 	(1..10).do { |i|
 		sig = sig + SinOsc.ar(freq * i, 0, amp * (-1.0*(i-1)/harm).exp);
     };
 
-    sig = sig * amp;
+	sig = sig * 0.5;
 	sig = FreeVerb.ar(sig, 0.3, 1.0, 0.1);
+/*
+	hoa = HoaEncodeDirection.ar(sig, azim, elev, 1.5, AtkHoa.defaultOrder);*/
 
-	hoa = HoaEncodeDirection.ar(sig, azim, elev, 1.5, AtkHoa.defaultOrder);
+	hoa = sig;
 
 	Out.ar(0, hoa);
 }).add;
@@ -90,10 +94,6 @@ OSCdef(\continuous, {
 	amp = ~maxAmp / max(1, dist/10.0);
 	amp = amp / 2.0;
 
-	azim = Lag.kr(azim, 0.5);
-	elev = Lag.kr(elev, 0.5);
-	amp = Lag.kr(amp, 0.5);
-
 	if(~continuous[id].notNil) {
         ~continuous[id].set(\freq, freq, \amp, amp, \azim, azim, \elev, elev);
     } {
@@ -134,6 +134,7 @@ OSCdef(\collision, {
 OSCdef(\clearAll, {
 	arg msg, time, addr, recvPort;
 
+	~continuous.do { |synth| synth.set(\gate, 0) };
 	~continuous.do { |synth| synth.free };
 	~continuous = ();
 }, '/clear');
